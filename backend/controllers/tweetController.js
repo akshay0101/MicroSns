@@ -2,6 +2,7 @@ const db = require("../models");
 const bcrypt = require("bcryptjs");
 // create main model
 const Tweets = db.tweets;
+const Likes = db.likes;
 var jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -45,7 +46,14 @@ const getTweet = async (req, res) => {
 
   try {
     const tweets = await Tweets.findAll({
-      attributes: ["id", "text", "media", "userId"],
+      attributes: [
+        "id",
+        "text",
+        "media",
+        "userId",
+        "likesCount",
+        "commentsCount",
+      ],
     });
 
     if (tweets) {
@@ -64,7 +72,31 @@ const getTweet = async (req, res) => {
   }
 };
 
+const deleteTweet = async (req, res) => {
+  const tweetId = req.body.id;
+
+  Promise.all([
+    await Tweets.destroy({ where: { id: tweetId } }),
+    await Likes.destroy({ where: { tweetId } }),
+  ]).then((values) => {
+    return res.status(200).json({ tweet: values[0] });
+  });
+
+  // if (post) {
+  //   return res.json({
+  //     success: 1,
+  //     message: " tweet is deleted ",
+  //   });
+  // } else {
+  //   return res.json({
+  //     success: 0,
+  //     message: " error occured ",
+  //   });
+  // }
+};
+
 module.exports = {
   addTweet,
   getTweet,
+  deleteTweet,
 };

@@ -20,15 +20,15 @@
 
 .Home .Post {
   width: 600px;
-  height: 500px;
+  height: 550px;
   border: 2px solid black;
   display: flex;
   flex-direction: column;
-  margin: 50px;
+  margin: 40px;
 }
 
 .Home .Post .Image {
-  flex: 70%;
+  flex: 10%;
 }
 
 .Home .Post .Image img {
@@ -57,15 +57,24 @@
 .Home .Post .Engagement {
   flex: 20%;
   display: grid;
-  place-items: center;
+  place-items: left;
+  margin-left: 20px;
+  text-align: left;
 }
 .Home .Post .Engagement #likeButton {
-  font-size: 40px;
+  font-size: 30px;
   color: grey;
 }
 .Home .Post .Engagement #likeButton:hover {
   cursor: pointer;
+  color: rgb(19, 218, 248);
 }
 .Home .Post .Engagement #likeButton:active {
-  color: black;
+  color: rgb(19, 218, 248);
+}
+
+.Home .Post .del {
+  flex: 20%;
+  display: grid;
+  margin-right: 0;
 }

@@ -7,6 +7,9 @@ import { useHistory } from "react-router-dom";
 function Upload() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState([]);
+  const [likesCount, setLikesCount] = useState("");
+  const [commentsCount, setCommentsCount] = useState("");
+
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState(0);
@@ -104,6 +107,8 @@ function Upload() {
             text: description,
             media: s.secure_url,
             userId: userId,
+            likesCount: likesCount,
+            commentsCount: commentsCount,
           },
           {
             headers: {

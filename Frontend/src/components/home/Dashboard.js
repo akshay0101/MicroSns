@@ -5,6 +5,11 @@ import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
 import "./home.scss";
 import Upload from "../Upload/Upload";
+
+// import { Alert } from "react-alert";
+
+import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+
 const Dashboard = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -98,8 +103,75 @@ const Dashboard = () => {
 
   const logout = async () => {
     const response = await axios.get("http://localhost:3001/api/users/logout");
+
+    // const response = await axiosJWT.get(
+    //   "http://localhost:3001/api/users/logout",
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   }
+    // );
+
     if (response) console.log(" logged out ");
     else console.log(" error ");
+  };
+
+  const deleteTweet = async (uid, pid) => {
+    const decoded = jwt_decode(token);
+    console.log("decoded ", decoded);
+    console.log(" uid ", uid);
+    console.log(" pid ", pid);
+
+    if (String(decoded.userId) === String(uid)) {
+      console.log(" let's see ");
+      const response = await axios.delete(
+        `http://localhost:3001/api/users/post/${pid}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          data: {
+            id: pid,
+          },
+        }
+      );
+
+      return response;
+    } else {
+      console.log(" unauthorized access ");
+      alert(" unauthorized ");
+    }
+  };
+
+  const likeTweet = async (pid) => {
+    console.log(" liking tweet ,,,,,,,,,");
+
+    const decoded = jwt_decode(token);
+    const uid = decoded.userId;
+    const data = { userId: uid, tweetId: pid };
+    console.log(" like data ", data);
+
+    return axiosJWT
+      .post(
+        "http://localhost:3001/api/users/likeTweet",
+        {
+          userId: parseInt(uid),
+          tweetId: pid,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((resp) => resp.data)
+      .catch((error) => {
+        console.log(error);
+        alert("You already liked this post!");
+      });
   };
 
   return (
@@ -119,12 +191,29 @@ const Dashboard = () => {
                 <img src={val.media} alt="posts" />
               </div>
               <div className="Content">
-                {/* <div className="title"> {val.id}</div> */}
+                <div className="title"> {val.id}</div>
                 <div className="description">{val.text}</div>
                 <div className="description">
                   {" "}
                   posted by user : {val.userId}
                 </div>
+
+                <div className="Engagement">
+                  <ThumbUpAltIcon
+                    id="likeButton"
+                    onClick={() => {
+                      likeTweet(val.id);
+                    }}
+                  />
+                  {val.likesCount}
+                </div>
+                <button
+                  className="del"
+                  onClick={() => deleteTweet(val.userId, val.id)}
+                >
+                  {" "}
+                  delete
+                </button>
               </div>
             </div>
           );

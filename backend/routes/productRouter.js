@@ -1,9 +1,9 @@
-const productController = require("../controllers/productController.js");
+// const productController = require("../controllers/productController.js");
 const usercontroller = require("../controllers/userController.js");
 const tweetController = require("../controllers/tweetController.js");
 const verifyToken = require("../middleware/verifyToken.js");
 const RefreshToken = require("../controllers/refreshToken.js");
-
+const likeController = require("../controllers/likeController.js");
 const router = require("express").Router();
 
 router.post("/addUser", usercontroller.addUser);
@@ -17,14 +17,10 @@ router.post("/post", verifyToken, tweetController.addTweet);
 // router.post( '/comment', verifyToken, usercontroller.likeit)
 router.get("/getPosts", verifyToken, tweetController.getTweet);
 
-router.get("/logout", usercontroller.logout);
+router.post("/likeTweet", verifyToken, likeController.likeTweet);
 
-router.post("/addProduct", productController.addProduct);
-router.get("/allProducts", productController.getAllProducts);
-router.get("/published", productController.getPublishedProduct);
-router.get("/:id", productController.getSingleProduct);
-router.put("/:id", productController.updateProduct);
-router.delete("/:id", productController.deleteProduct);
+router.get("/logout", usercontroller.logout);
+router.delete("/post/:id", verifyToken, tweetController.deleteTweet);
 
 module.exports = router;
 
