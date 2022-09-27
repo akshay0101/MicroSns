@@ -44,3 +44,9 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
+
+// to avoid if there's any old server already running because
+// of nodemon self restarting
+process.once("SIGUSR2", () =>
+  server.close((err) => process.kill(process.pid, "SIGUSR2"))
+);

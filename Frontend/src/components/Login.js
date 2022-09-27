@@ -11,12 +11,13 @@ const Login = () => {
   const Auth = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/api/users/login", {
+      const auth = await axios.post("http://localhost:3001/api/users/login", {
         username: username,
         password: password,
       });
       history.push("/dashboard");
       console.log(" done   -------------------------");
+      return auth;
     } catch (error) {
       console.log(error, "   -------------------------");
 

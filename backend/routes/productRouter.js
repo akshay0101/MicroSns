@@ -4,6 +4,9 @@ const tweetController = require("../controllers/tweetController.js");
 const verifyToken = require("../middleware/verifyToken.js");
 const RefreshToken = require("../controllers/refreshToken.js");
 const likeController = require("../controllers/likeController.js");
+const commentController = require("../controllers/commentController.js");
+const { verify } = require("jsonwebtoken");
+
 const router = require("express").Router();
 
 router.post("/addUser", usercontroller.addUser);
@@ -18,9 +21,13 @@ router.post("/post", verifyToken, tweetController.addTweet);
 router.get("/getPosts", verifyToken, tweetController.getTweet);
 
 router.post("/likeTweet", verifyToken, likeController.likeTweet);
-
+// router.get("/iLiked/:id/:id", verifyToken, likeController.iLiked);
 router.get("/logout", usercontroller.logout);
 router.delete("/post/:id", verifyToken, tweetController.deleteTweet);
+
+router.post("/comment/add", verifyToken, commentController.addComment);
+router.get("/post/comment", commentController.getComments);
+router.delete("/comment/:id", verifyToken, commentController.removeComment);
 
 module.exports = router;
 

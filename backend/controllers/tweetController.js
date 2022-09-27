@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 // create main model
 const Tweets = db.tweets;
 const Likes = db.likes;
+const Comments = db.comments;
 var jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -78,6 +79,7 @@ const deleteTweet = async (req, res) => {
   Promise.all([
     await Tweets.destroy({ where: { id: tweetId } }),
     await Likes.destroy({ where: { tweetId } }),
+    await Comments.destroy({ where: { tweetId } }),
   ]).then((values) => {
     return res.status(200).json({ tweet: values[0] });
   });

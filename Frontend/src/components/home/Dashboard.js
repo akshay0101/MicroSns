@@ -5,10 +5,9 @@ import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
 import "./home.scss";
 import Upload from "../Upload/Upload";
-
-// import { Alert } from "react-alert";
-
+import Comment from "./Comment";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+// import { Alert } from "react-alert";
 
 const Dashboard = () => {
   const [name, setName] = useState("");
@@ -115,6 +114,7 @@ const Dashboard = () => {
 
     if (response) console.log(" logged out ");
     else console.log(" error ");
+    history.push("/");
   };
 
   const deleteTweet = async (uid, pid) => {
@@ -145,6 +145,17 @@ const Dashboard = () => {
     }
   };
 
+  // const iLiked = async (pid) => {
+  //   console.log(pid, userId);
+  //   const response = await axiosJWT.get(
+  //     `http://localhost:3001/api/users/iLiked/${pid}/${userId}`
+  //   );
+
+  //   console.log(" what ", response);
+
+  //   return response;
+  // };
+
   const likeTweet = async (pid) => {
     console.log(" liking tweet ,,,,,,,,,");
 
@@ -174,9 +185,22 @@ const Dashboard = () => {
       });
   };
 
+  // const addComment = async (pid) => {
+
+  //   return axiosJWT.post(
+  //     "http://localhost:3001/api/users/comment/add",
+  //     {
+  //       userId:userId,
+  //       tweetId: pid,
+  //       text:
+  //     },
+  //   )
+
+  // }
+
   return (
     <div className="home">
-      <h1>Welcome Back {name} </h1>
+      <h1>Welcome {username} </h1>
       {/* <Upload userId={userId} token={token} /> */}
       <button onClick={getUsers}> check</button>
       <button onClick={logout}> logout</button>
@@ -207,6 +231,7 @@ const Dashboard = () => {
                   />
                   {val.likesCount}
                 </div>
+                <Comment pid={val.id} />
                 <button
                   className="del"
                   onClick={() => deleteTweet(val.userId, val.id)}
@@ -214,6 +239,7 @@ const Dashboard = () => {
                   {" "}
                   delete
                 </button>
+                {/* {iLiked(val.id) ? <> liked</> : <></>} */}
               </div>
             </div>
           );
