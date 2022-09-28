@@ -3,14 +3,12 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
-import Index from "./components";
+import Index from "./components/index";
+import "./App.css";
 
 function App() {
   return (
-    <div
-      className="App"
-      style={{ backgroundColor: "#15202b", background: "#15202b" }}
-    >
+    <div className="App" style={{}}>
       <BrowserRouter>
         <Switch>
           <Route exact path="/">

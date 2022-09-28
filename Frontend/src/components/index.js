@@ -2,17 +2,34 @@
 // export { default as LeftPane } from "./leftPane/LeftPane"
 //export { default as RightPane } from './rightPane/RightPane'
 
-import LeftPane from "./leftPane/Leftpane";
 import Dashboard from "./home/Dashboard";
 import React from "react";
 import Upload from "./Upload/Upload";
+import Sidebar from "./Sidebar/Sidebar";
+import Feed from "./Feed/Feed";
+import "./index.css";
+import Widgets from "./Widgets/Widgets";
 
 const Index = () => {
   return (
-    <div style={{ display: "inline-block" }}>
+    <div className="app">
       {/* <LeftPane /> */}
-      <Upload />
-      <Dashboard />
+      {/* <Upload />
+      <Dashboard /> */}
+
+      {/* sidebar */}
+
+      <Sidebar />
+
+      {/* feed */}
+
+      <Feed />
+
+      {/* react make divs on stack so to make them on same line use flex in app.css*/}
+
+      {/* widgets */}
+
+      <Widgets />
     </div>
   );
 };
