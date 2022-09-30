@@ -143,7 +143,7 @@ const Comment = (props) => {
       }
     } else {
       console.log(" unauthorized access ");
-      // alert(" unauthorized ");
+      alert(" unauthorized ");
     }
   };
 

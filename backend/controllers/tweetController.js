@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 // create main model
 const Tweets = db.tweets;
 const Likes = db.likes;
+const Users = db.users;
 const Comments = db.comments;
 var jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -37,6 +38,35 @@ const addTweet = async (req, res) => {
 
     res.status(500).send({
       message: err.message || "Error occurred while creating the post",
+    });
+  }
+};
+
+const getUserInfo = async (req, res) => {
+  try {
+    const info = await Users.findOne({
+      attributes: ["id", "username", "name"],
+
+      where: {
+        id: req.body.id,
+      },
+    });
+    if (info) {
+      res.json({
+        success: 1,
+        data: info,
+      });
+    } else {
+      res.json({
+        success: 0,
+        message: "no data",
+        data: info,
+      });
+    }
+  } catch (error) {
+    res.json({
+      success: 0,
+      message: " can't fetch the data of user",
     });
   }
 };
@@ -101,4 +131,5 @@ module.exports = {
   addTweet,
   getTweet,
   deleteTweet,
+  getUserInfo,
 };

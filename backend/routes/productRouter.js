@@ -28,7 +28,7 @@ router.delete("/post/:id", verifyToken, tweetController.deleteTweet);
 router.post("/comment/add", verifyToken, commentController.addComment);
 router.get("/post/comment", commentController.getComments);
 router.delete("/comment/:id", verifyToken, commentController.removeComment);
-
+router.get("/getUserInfo/:id", tweetController.getUserInfo);
 module.exports = router;
 
 /** 

@@ -19,6 +19,71 @@
   justify-content: space-between;
   margin-top: 20px;
 }
+.post_info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  color: rgb(176, 174, 174);
+}
+
+.post__footer #commentbox {
+  /* color: var(--twitter-color); */
+  margin: 5px;
+  cursor: pointer;
+  color: rgb(176, 174, 174);
+}
+
+.post__footer #commentbox:hover {
+  /* color: var(--twitter-color); */
+
+  cursor: pointer;
+  color: rgb(19, 218, 248);
+  transition: color 100ms ease-out;
+}
+.post__footer #repeat {
+  /* color: var(--twitter-color); */
+  margin: 5px;
+  cursor: pointer;
+  color: rgb(176, 174, 174);
+}
+
+.post__footer #repeat:hover {
+  /* color: var(--twitter-color); */
+
+  cursor: pointer;
+  color: rgb(19, 218, 248);
+  transition: color 100ms ease-out;
+}
+
+.post__footer #delete {
+  /* color: var(--twitter-color); */
+  margin: 5px;
+  cursor: pointer;
+  color: rgb(176, 174, 174);
+}
+
+.post__footer #delete:hover {
+  /* color: var(--twitter-color); */
+
+  cursor: pointer;
+  color: rgb(248, 79, 7);
+  transition: color 100ms ease-out;
+}
+
+.post__footer #like {
+  /* color: var(--twitter-color); */
+  margin: 5px;
+  cursor: pointer;
+  color: rgb(176, 174, 174);
+}
+
+.post__footer #like:hover {
+  /* color: var(--twitter-color); */
+
+  cursor: pointer;
+  color: rgb(248, 79, 7);
+  transition: color 100ms ease-out;
+}
 
 .post__headerDescription {
   margin-bottom: 10px;
@@ -46,4 +111,28 @@
 
 .post__avatar {
   padding: 20px;
+}
+
+.inputWithButton {
+  position: relative;
+  height: 100px;
+  width: 200px;
+}
+
+.inputWithButton input {
+  width: 70%;
+  height: 25px;
+  padding-right: 60px;
+}
+
+.inputWithButton button {
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
+
+.compose-form-textarea :hover {
+  color: rgb(19, 218, 248);
+  cursor: pointer;
+  transition: color 100ms ease-out;
 }

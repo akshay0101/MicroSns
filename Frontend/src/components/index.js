@@ -10,13 +10,16 @@ import Feed from "./Feed/Feed";
 import "./index.css";
 import Widgets from "./Widgets/Widgets";
 
+import { RecoilRoot, atom } from "recoil";
+
+const userInfo = atom({
+  key: "userState",
+  default: [],
+});
+
 const Index = () => {
   return (
     <div className="app">
-      {/* <LeftPane /> */}
-      {/* <Upload />
-      <Dashboard /> */}
-
       {/* sidebar */}
 
       <Sidebar />

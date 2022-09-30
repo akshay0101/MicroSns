@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
+
 import "./home.scss";
 import Upload from "../Upload/Upload";
 import Comment from "./Comment";
@@ -46,9 +47,6 @@ const Dashboard = () => {
       }
     }
   };
-
-  //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoidGVzdDEiLCJ1c2VybmFtZSI6InRlc3QxIiwiZW1haWwiOiJ0ZXN0MUBnbWFpbC5jb20iLCJyZWZyZXNoVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlJanA3SW1sa0lqb3hMQ0p1WVcxbElqb2lkR1Z6ZERFaUxDSjFjMlZ5Ym1GdFpTSTZJblJsYzNReElpd2laVzFoYVd3aU9pSjBaWE4wTVVCbmJXRnBiQzVqYjIwaUxDSnlaV1p5WlhOb1ZHOXJaVzRpT2lKbGVVcG9Za2RqYVU5cFNrbFZla2t4VG1sSmMwbHVValZqUTBrMlNXdHdXRlpEU2prdVpYbEtNV015Vm5sSmFuQTNTVzFzYTBscWIzaE1RMHAxV1ZjeGJFbHFiMmxrUjFaNlpFUkZhVXhEU2pGak1sWjVZbTFHZEZwVFNUWkpibEpzWXpOUmVFbHBkMmxhVnpGb1lWZDNhVTlwU2pCYVdFNHdUVlZDYm1KWFJuQmlRelZxWWpJd2FVeERTbmxhVjFwNVdsaE9iMVpIT1hKYVZ6UnBUMjAxTVdKSGQzTkpiVTU1V2xkR01GcFhVa0prUTBrMlNXcEpkMDFxU1hSTlJHdDBUVlJzVlUxVVFUWk5SR2MyVFhwWmRVMUVRWGRYYVVselNXNVdkMXBIUmpCYVYxSkNaRU5KTmtscVNYZE5ha2wwVFVScmRFMVViRlZOVkVFMlRVUm5OazE2V1hWTlJFRjNWMmxLT1V4RFNuQlpXRkZwVDJwRk1rNXFUVEZQUkVsNVQwUlJjMGx0VmpSalEwazJUVlJaTWsxNldUSlBSRmswVGtnd0xsQXhXVzUxZHpOWlRtaEpWM290TlhCRFluTkZWbE5SWjNVM05tdDBMWFYyV2kxSmFVRTBNVFpNYURRaUxDSmpjbVZoZEdWa1FYUWlPaUl5TURJeUxUQTVMVEU1VkRFd09qQTRPak0yTGpBd01Gb2lMQ0oxY0dSaGRHVmtRWFFpT2lJeU1ESXlMVEE1TFRFNVZERXdPakV4T2pJMExqQXdNRm9pZlN3aWFXRjBJam94TmpZek5qVXhPVEUzTENKbGVIQWlPakUyTmpNM016Z3pNVGQ5LkVwYzkzRndPelFtQTJoRTZDeGhkbmtlOTI3OUpOVE9IcldFTTZSMDhuWWciLCJjcmVhdGVkQXQiOiIyMDIyLTA5LTE5VDEwOjA4OjM2LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTA5LTIwVDA1OjMxOjU3LjAwMFoifSwiaWF0IjoxNjYzNzMzOTAwLCJleHAiOjE2NjM4MjAzMDB9.g-n94KQJ5DWEMN1cpILUZCln6r5hTYeFgWasYPD94DY
-
   const axiosJWT = axios.create();
 
   axiosJWT.interceptors.request.use(
@@ -144,6 +142,23 @@ const Dashboard = () => {
       alert(" unauthorized ");
     }
   };
+
+  // const postInfo = async (uid) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:3001/api/users/getUserInfo/${uid}`,
+  //       {
+  //         data: {
+  //           id: uid,
+  //         },
+  //       }
+  //     );
+  //     console.log(" post indo", response);
+  //     return response;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // const iLiked = async (pid) => {
   //   console.log(pid, userId);

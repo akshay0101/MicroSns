@@ -6,22 +6,26 @@ import Register from "./components/Register";
 import Index from "./components/index";
 import "./App.css";
 
+import { RecoilRoot, atom } from "recoil";
+
 function App() {
   return (
     <div className="App" style={{}}>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/dashboard">
-            <Index />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/">
+              <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/dashboard">
+              <Index />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </RecoilRoot>
     </div>
   );
 }
