@@ -18,6 +18,9 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 
 import { Alert, AlertTitle } from "@mui/material";
+import { SettingsEthernet } from "@material-ui/icons";
+
+import Moment from "react-moment";
 
 const Post = (props) => {
   const [name, setName] = useState("");
@@ -243,6 +246,8 @@ const Post = (props) => {
             <h2>
               {props.userId} <span className="post__headerSpecial">@</span>
             </h2>
+
+            <Moment fromNow>{props?.createAt.toDate()}</Moment>
           </div>
           <div className="post__headerDescription">
             <p>{props.text}</p>
@@ -268,7 +273,7 @@ const Post = (props) => {
           />
         </div>
 
-        <div className="post_info">0 likes 0 comments </div>
+        {/* <div className="post_info">0 likes 0 comments </div> */}
 
         <div className="post__footer">
           <div className="foot">
@@ -288,6 +293,7 @@ const Post = (props) => {
               likeTweet(props.id);
             }}
           />
+          <p style={{ color: "white" }}>ok{props.likes}</p>
           <RepeatIcon
             id="repeat"
             fontSize="small"

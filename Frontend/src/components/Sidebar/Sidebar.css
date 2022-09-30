@@ -28,3 +28,15 @@
   height: 50px !important;
   margin-top: 20px !important;
 }
+
+.sidebar__tweet2 {
+  background-color: var(--twitter-u) !important;
+  border: none !important;
+  color: #fbf8f8 !important;
+  font-weight: 900 !important;
+  text-transform: inherit !important;
+  border-radius: 30px !important;
+  height: 50px !important;
+
+  margin-top: 300px !important;
+}

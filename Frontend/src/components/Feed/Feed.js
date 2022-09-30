@@ -7,8 +7,10 @@ import "./Feed.css";
 import TweetBox from "../TweetBox/TweetBox";
 import Post from "../Post/Post";
 import { useRecoilState } from "recoil";
+import { modalState } from "../../atom/modalAtom";
 
 const Feed = () => {
+  const [test, setTest] = useRecoilState(modalState);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState(0);
@@ -38,7 +40,7 @@ const Feed = () => {
 
       setExpire(decoded.exp);
       console.log(username);
-      console.log(" this is my toke ", token);
+      console.log(" this is my token ", token);
     } catch (error) {
       if (error.response) {
         history.push("/");
@@ -62,6 +64,7 @@ const Feed = () => {
         setUserId(decoded.userId);
         setExpire(decoded.exp);
         setUsername(decoded.username);
+        setTest(decoded.username);
       }
 
       // setMe({ userId: userId });
@@ -160,11 +163,20 @@ const Feed = () => {
       <TweetBox />
 
       {/* posts */}
+      {/* <p style={{ color: "white" }}> lets see : {test}</p> */}
+      {/* <input
+        className="compose-form-textarea"
+        placeholder="What's happening?"
+        onChange={(event) => {
+          setTest(event.target.value);
+        }}
+      /> */}
+      {/* recoil is working sidebar and feed's test changes  */}
 
+      {/* <Post />
       <Post />
       <Post />
-      <Post />
-      <Post />
+      <Post /> */}
 
       <div>
         {Array.from(posts).map((val, key) => {
@@ -174,6 +186,8 @@ const Feed = () => {
               userId={val.userId}
               text={val.text}
               media={val.media}
+              likes={val.likesCount}
+              createdAt={val.createdAt}
             />
           );
         })}
@@ -183,3 +197,5 @@ const Feed = () => {
 };
 
 export default Feed;
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsIm5hbWUiOiJzYWl0YW1hIiwidXNlcm5hbWUiOiJvbmVQdW5jaCIsImVtYWlsIjoib25lQG9uZS5jb20iLCJpYXQiOjE2NjQ1MjMzNDMsImV4cCI6MTY2NDYwOTc0M30.EiNj2XZY_BsB7V1gQHDg7X4ok4iDkFqRiiUwmHgKiIY

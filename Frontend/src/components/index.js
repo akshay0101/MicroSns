@@ -12,27 +12,23 @@ import Widgets from "./Widgets/Widgets";
 
 import { RecoilRoot, atom } from "recoil";
 
-const userInfo = atom({
-  key: "userState",
-  default: [],
-});
-
 const Index = () => {
   return (
     <div className="app">
       {/* sidebar */}
+      <RecoilRoot>
+        <Sidebar />
 
-      <Sidebar />
+        {/* feed */}
 
-      {/* feed */}
+        <Feed />
 
-      <Feed />
+        {/* react make divs on stack so to make them on same line use flex in app.css*/}
 
-      {/* react make divs on stack so to make them on same line use flex in app.css*/}
+        {/* widgets */}
 
-      {/* widgets */}
-
-      <Widgets />
+        <Widgets />
+      </RecoilRoot>
     </div>
   );
 };

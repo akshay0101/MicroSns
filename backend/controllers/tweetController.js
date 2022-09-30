@@ -84,6 +84,7 @@ const getTweet = async (req, res) => {
         "userId",
         "likesCount",
         "commentsCount",
+        "createdAt",
       ],
     });
 
