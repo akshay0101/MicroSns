@@ -3,7 +3,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
 
-import "./Post.css";
+import "./Post.scss";
 import { Avatar, Button, TextField } from "@material-ui/core";
 import im from "./im.jpg";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
@@ -19,26 +19,32 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import { Alert, AlertTitle } from "@mui/material";
 import { SettingsEthernet } from "@material-ui/icons";
-
+import { tokenState, userIdState } from "../../atom/modalAtom";
 import Moment from "react-moment";
+import { useRecoilState } from "recoil";
 
 const Post = (props) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState(0);
-  const [token, setToken] = useState("");
+  const [userId, setUserId] = useRecoilState(userIdState);
+  const [token, setToken] = useRecoilState(tokenState);
   const [expire, setExpire] = useState("");
 
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState("");
+  const [totalcomment, setTotalComment] = useState("");
+  const [f, setF] = useState(false);
+  const [counter, setCounter] = useState(0);
+  const date = props.createdAt;
 
   const history = useHistory();
 
   useEffect(() => {
     refreshToken();
+    //getComments();
     //getUsers();
-  }, []);
+  });
 
   const refreshToken = async () => {
     try {
@@ -216,15 +222,15 @@ const Post = (props) => {
       );
       history.push("/dashboard");
 
-      <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        This is a success alert — <strong>check it out!</strong>
-      </Alert>;
+      // <Alert severity="success">
+      //   <AlertTitle>Success</AlertTitle>
+      //   This is a success alert — <strong>check it out!</strong>
+      // </Alert>;
 
       alert(" Comment submitted ");
 
       console.log(" comment added   -------------------------");
-      setComment("");
+
       return auth;
     } catch (error) {
       console.log(error, "   -------------------------");
@@ -232,6 +238,25 @@ const Post = (props) => {
       if (error.response) {
         console.log(error.response.data.msg);
       }
+    }
+  };
+
+  const getComments = async () => {
+    if (!f) {
+      const res = await axiosJWT.get(
+        "http://localhost:3001/api/users/post/comment",
+        {
+          params: {
+            tweetId: props.id,
+          },
+        }
+      );
+      console.log(" comments ", res);
+      setTotalComment(res.data.comments);
+      setF(true);
+      console.log(" user comment ", res.data.comments);
+    } else {
+      setF(false);
     }
   };
 
@@ -246,8 +271,9 @@ const Post = (props) => {
             <h2>
               {props.userId} <span className="post__headerSpecial">@</span>
             </h2>
-
-            <Moment fromNow>{props?.createAt.toDate()}</Moment>
+            <p1>
+              <Moment fromNow>{date}</Moment>
+            </p1>
           </div>
           <div className="post__headerDescription">
             <p>{props.text}</p>
@@ -276,24 +302,44 @@ const Post = (props) => {
         {/* <div className="post_info">0 likes 0 comments </div> */}
 
         <div className="post__footer">
-          <div className="foot">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <ChatBubbleOutlineIcon
               id="commentbox"
               fontSize="small"
               // style={{ color: "rgb(176, 174, 174)" }}
-              onClick={() => {}}
+              onClick={getComments}
             />
+            <p style={{ color: "rgb(176, 174, 174)" }}>
+              {" "}
+              {props.commentsCount}
+            </p>
           </div>
 
-          <FavoriteIcon
-            id="like"
-            fontSize="small"
-            // style={{ color: "rgb(176, 174, 174)" }}
-            onClick={() => {
-              likeTweet(props.id);
+          {/* this styling works here like with counter but not through className with same code */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
             }}
-          />
-          <p style={{ color: "white" }}>ok{props.likes}</p>
+          >
+            <FavoriteIcon
+              id="like"
+              fontSize="small"
+              // style={{ color: "rgb(176, 174, 174)" }}
+              onClick={() => {
+                likeTweet(props.id);
+              }}
+            />
+            <p style={{ color: "rgb(176, 174, 174)" }}> {props.likes}</p>
+          </div>
+
           <RepeatIcon
             id="repeat"
             fontSize="small"
@@ -309,7 +355,83 @@ const Post = (props) => {
             }}
           />
         </div>
+
+        <div>
+          {f && (
+            <>
+              {Array.from(totalcomment).map((val, key) => {
+                return (
+                  <>
+                    <Postcomment
+                      username={val.username}
+                      text={val["comments.text"]}
+                      tx={val["comments.createdAt"]}
+                      cid={val["comments.id"]}
+                      uid={val["comments.userId"]}
+                    />
+                  </>
+                );
+              })}
+            </>
+          )}
+        </div>
       </div>
+    </div>
+  );
+};
+
+const Postcomment = (props) => {
+  const [token, setToken] = useRecoilState(tokenState);
+  const [userId, setUserId] = useRecoilState(userIdState);
+
+  const deleteComment = async (cid, uid) => {
+    console.log(" trying to delete c");
+    if (String(userId) === String(uid)) {
+      try {
+        const res = await axios.delete(
+          `http://localhost:3001/api/users/comment/${cid}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            data: {
+              id: cid,
+            },
+          }
+        );
+        console.log(" succesfully deleted ");
+        alert(" succesfully deleted ");
+
+        return res;
+      } catch (error) {
+        console.log(" ------------------", error);
+      }
+    } else {
+      console.log(" unauthorized access ");
+      alert(" unauthorized ");
+    }
+  };
+
+  return (
+    <div className="comment">
+      <div className="info">
+        <h2 className="comment-header">@ {props.username} </h2>
+        <p1>
+          <Moment fromNow>{props.tx}</Moment>
+        </p1>
+      </div>
+      <p1 className="comment-body">-- {props.text}</p1>
+
+      <p className="comment-footer">
+        <a
+          href="#"
+          className="comment-footer-delete"
+          onClick={() => deleteComment(props.cid, props.uid)}
+        >
+          Delete
+        </a>
+      </p>
     </div>
   );
 };

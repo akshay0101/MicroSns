@@ -7,14 +7,14 @@ import "./Feed.css";
 import TweetBox from "../TweetBox/TweetBox";
 import Post from "../Post/Post";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../atom/modalAtom";
+import { modalState, tokenState } from "../../atom/modalAtom";
 
 const Feed = () => {
   const [test, setTest] = useRecoilState(modalState);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState(0);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useRecoilState(tokenState);
   const [expire, setExpire] = useState("");
 
   const [users, setUsers] = useState([]);
@@ -162,22 +162,6 @@ const Feed = () => {
 
       <TweetBox />
 
-      {/* posts */}
-      {/* <p style={{ color: "white" }}> lets see : {test}</p> */}
-      {/* <input
-        className="compose-form-textarea"
-        placeholder="What's happening?"
-        onChange={(event) => {
-          setTest(event.target.value);
-        }}
-      /> */}
-      {/* recoil is working sidebar and feed's test changes  */}
-
-      {/* <Post />
-      <Post />
-      <Post />
-      <Post /> */}
-
       <div>
         {Array.from(posts).map((val, key) => {
           return (
@@ -188,6 +172,7 @@ const Feed = () => {
               media={val.media}
               likes={val.likesCount}
               createdAt={val.createdAt}
+              commentsCount={val.commentsCount}
             />
           );
         })}
