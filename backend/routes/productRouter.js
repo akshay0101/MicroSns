@@ -21,7 +21,9 @@ router.post("/post", verifyToken, tweetController.addTweet);
 router.get("/getPosts", verifyToken, tweetController.getTweet);
 
 router.post("/likeTweet", verifyToken, likeController.likeTweet);
-// router.get("/iLiked/:id/:id", verifyToken, likeController.iLiked);
+
+router.post("/iLiked", likeController.iLiked);
+
 router.get("/logout", usercontroller.logout);
 router.delete("/post/:id", verifyToken, tweetController.deleteTweet);
 

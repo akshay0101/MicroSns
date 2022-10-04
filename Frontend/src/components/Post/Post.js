@@ -36,6 +36,7 @@ const Post = (props) => {
   const [totalcomment, setTotalComment] = useState("");
   const [f, setF] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [showLike, setShowLike] = useState(false);
   const date = props.createdAt;
 
   const history = useHistory();
@@ -43,6 +44,7 @@ const Post = (props) => {
   useEffect(() => {
     refreshToken();
     //getComments();
+    iLiked(props.id);
     //getUsers();
   });
 
@@ -201,6 +203,26 @@ const Post = (props) => {
       });
   };
 
+  const iLiked = async (pid) => {
+    const decoded = jwt_decode(token);
+    const uid = decoded.userId;
+    console.log(" checking it...");
+
+    const resp = await axios.post("http://localhost:3001/api/users/iLiked", {
+      userId: parseInt(uid),
+      tweetId: pid,
+    });
+
+    if (resp.data.data != null) {
+      console.log(" liked ok ", pid);
+      console.log(resp.data);
+      setShowLike(true);
+    } else {
+      console.log(" liked not ", pid);
+      console.log(resp.data);
+    }
+  };
+
   const addComment = async (e) => {
     e.preventDefault();
 
@@ -322,23 +344,46 @@ const Post = (props) => {
           </div>
 
           {/* this styling works here like with counter but not through className with same code */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <FavoriteIcon
-              id="like"
-              fontSize="small"
-              // style={{ color: "rgb(176, 174, 174)" }}
-              onClick={() => {
-                likeTweet(props.id);
+          {/* rgb(240, 46, 124) */}
+          {showLike ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
               }}
-            />
-            <p style={{ color: "rgb(176, 174, 174)" }}> {props.likes}</p>
-          </div>
+            >
+              <FavoriteIcon
+                id="like"
+                fontSize="small"
+                style={{ color: "rgb(240, 46, 124)" }}
+                onClick={() => {
+                  likeTweet(props.id);
+                }}
+              />
+              <p style={{ color: "rgb(240, 46, 124)" }}> {props.likes}</p>
+            </div>
+          ) : (
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <FavoriteIcon
+                  id="like"
+                  fontSize="small"
+                  // style={{ color: "rgb(176, 174, 174)" }}
+                  onClick={() => {
+                    likeTweet(props.id);
+                  }}
+                />
+                <p style={{ color: "rgb(176, 174, 174)" }}> {props.likes}</p>
+              </div>
+            </>
+          )}
 
           <RepeatIcon
             id="repeat"

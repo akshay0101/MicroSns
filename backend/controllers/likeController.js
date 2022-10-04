@@ -49,16 +49,23 @@ const getTweetsLikes = async (req, res) => {
   return res.status(200).json({ likes });
 };
 
-const iLiked = async (uid, pid) => {
+const iLiked = async (req, res) => {
   console.log(" req of Iliked ", req);
   const like = await Likes.findOne({
-    where: {
-      userId: uid,
-      tweetId: pid,
-    },
+    where: req.body,
   });
   console.log(" i lked ", like);
-  return like;
+  if (like)
+    return res.json({
+      success: 1,
+      data: like,
+    });
+  else {
+    return res.json({
+      success: 0,
+      message: "not liked ",
+    });
+  }
   // if (!like) return res.sendStatus(204);
   // else
   //   return res.json({
