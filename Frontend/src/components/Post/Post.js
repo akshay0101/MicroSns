@@ -37,12 +37,16 @@ const Post = (props) => {
   const [f, setF] = useState(false);
   const [counter, setCounter] = useState(0);
   const [showLike, setShowLike] = useState(false);
+  const [postusername, setPostusername] = useState("");
+  const [postname, setPostname] = useState("");
   const date = props.createdAt;
 
   const history = useHistory();
 
   useEffect(() => {
     refreshToken();
+    getUsername(props.userId);
+
     //getComments();
     iLiked(props.id);
     //getUsers();
@@ -176,31 +180,55 @@ const Post = (props) => {
 
   const likeTweet = async (pid) => {
     console.log(" liking tweet ,,,,,,,,,");
-
     const decoded = jwt_decode(token);
     const uid = decoded.userId;
     const data = { userId: uid, tweetId: pid };
     console.log(" like data ", data);
 
-    return axiosJWT
-      .post(
-        "http://localhost:3001/api/users/likeTweet",
-        {
-          userId: parseInt(uid),
-          tweetId: pid,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+    if (showLike) {
+      setShowLike(false);
+      return axiosJWT
+        .post(
+          "http://localhost:3001/api/users/unlike",
+          {
+            userId: parseInt(uid),
+            tweetId: pid,
           },
-        }
-      )
-      .then((resp) => resp.data)
-      .catch((error) => {
-        console.log(error);
-        alert("You already liked this post!");
-      });
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        .then((resp) => resp.data)
+        .catch((error) => {
+          console.log(error);
+          alert(" what !!!!!");
+        });
+    } else {
+      setShowLike(true);
+      return axiosJWT
+        .post(
+          "http://localhost:3001/api/users/likeTweet",
+          {
+            userId: parseInt(uid),
+            tweetId: pid,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((resp) => resp.data)
+        .catch((error) => {
+          console.log(error);
+          alert("You already liked this post!");
+        });
+    }
   };
 
   const iLiked = async (pid) => {
@@ -231,7 +259,7 @@ const Post = (props) => {
       const auth = await axiosJWT.post(
         "http://localhost:3001/api/users/comment/add",
         {
-          userId: userId,
+          userId: parseInt(userId),
           tweetId: props.id,
           text: comment,
         },
@@ -282,16 +310,80 @@ const Post = (props) => {
     }
   };
 
+  // good way to fetch any id's info with get request
+  const getUsername = async (id) => {
+    console.log(" getting the info for ", id);
+
+    try {
+      const userinfo = await axios.get(
+        `http://localhost:3001/api/users/getuser/${id}`,
+        {
+          params: {
+            id: id,
+          },
+        }
+      );
+      console.log("userinfo ", userinfo);
+      setPostusername(userinfo.data.username);
+      setPostname(userinfo.data.name);
+
+      return userinfo;
+    } catch (error) {
+      console.log(" eror for the user", error);
+    }
+  };
+
+  const deleteComment = async (cid, uid, pid) => {
+    console.log(" trying to delete c");
+    if (String(userId) === String(uid)) {
+      try {
+        const res = await axiosJWT.post(
+          `http://localhost:3001/api/users/comment`,
+          {
+            id: cid,
+            tweetId: pid,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(" succesfully deleted ");
+        alert(" succesfully deleted ");
+
+        return res;
+      } catch (error) {
+        console.log(" ------------------", error);
+      }
+    } else {
+      console.log(" unauthorized access ");
+      alert(" unauthorized ");
+    }
+  };
+
+  // const getUsername = async () => {};
+
   return (
     <div className="post">
       <div className="post__avatar">
         <Avatar />
       </div>
+      {/* <button
+        onClick={() => {
+          getUsername(props.userId);
+        }}
+      >
+        {" "}
+        check
+      </button> */}
       <div className="post__body">
         <div className="post__header">
           <div className="post__headerText">
             <h2>
-              {props.userId} <span className="post__headerSpecial">@</span>
+              {postname}{" "}
+              <span className="post__headerSpecial">@ {postusername}</span>
             </h2>
             <p1>
               <Moment fromNow>{date}</Moment>
@@ -375,7 +467,7 @@ const Post = (props) => {
                 <FavoriteIcon
                   id="like"
                   fontSize="small"
-                  // style={{ color: "rgb(176, 174, 174)" }}
+                  style={{ color: "rgb(176, 174, 174)" }}
                   onClick={() => {
                     likeTweet(props.id);
                   }}
@@ -407,13 +499,40 @@ const Post = (props) => {
               {Array.from(totalcomment).map((val, key) => {
                 return (
                   <>
-                    <Postcomment
+                    {/* <Postcomment
                       username={val.username}
                       text={val["comments.text"]}
                       tx={val["comments.createdAt"]}
                       cid={val["comments.id"]}
                       uid={val["comments.userId"]}
-                    />
+                    /> */}
+                    <div className="comment">
+                      <div className="info">
+                        <h2 className="comment-header">@ {val.username} </h2>
+                        <p1>
+                          <Moment fromNow>{val["comments.createdAt"]}</Moment>
+                        </p1>
+                      </div>
+                      <p1 className="comment-body">
+                        -- {val["comments.text"]}
+                      </p1>
+
+                      <p className="comment-footer">
+                        <a
+                          href="#"
+                          className="comment-footer-delete"
+                          onClick={() =>
+                            deleteComment(
+                              val["comments.id"],
+                              val["comments.userId"],
+                              props.id
+                            )
+                          }
+                        >
+                          Delete
+                        </a>
+                      </p>
+                    </div>
                   </>
                 );
               })}
@@ -425,60 +544,60 @@ const Post = (props) => {
   );
 };
 
-const Postcomment = (props) => {
-  const [token, setToken] = useRecoilState(tokenState);
-  const [userId, setUserId] = useRecoilState(userIdState);
+// const Postcomment = (props) => {
+//   const [token, setToken] = useRecoilState(tokenState);
+//   const [userId, setUserId] = useRecoilState(userIdState);
 
-  const deleteComment = async (cid, uid) => {
-    console.log(" trying to delete c");
-    if (String(userId) === String(uid)) {
-      try {
-        const res = await axios.delete(
-          `http://localhost:3001/api/users/comment/${cid}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            data: {
-              id: cid,
-            },
-          }
-        );
-        console.log(" succesfully deleted ");
-        alert(" succesfully deleted ");
+//   const deleteComment = async (cid, uid) => {
+//     console.log(" trying to delete c");
+//     if (String(userId) === String(uid)) {
+//       try {
+//         const res = await axios.delete(
+//           `http://localhost:3001/api/users/comment/${cid}`,
+//           {
+//             headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${token}`,
+//             },
+//             data: {
+//               id: cid,
+//             },
+//           }
+//         );
+//         console.log(" succesfully deleted ");
+//         alert(" succesfully deleted ");
 
-        return res;
-      } catch (error) {
-        console.log(" ------------------", error);
-      }
-    } else {
-      console.log(" unauthorized access ");
-      alert(" unauthorized ");
-    }
-  };
+//         return res;
+//       } catch (error) {
+//         console.log(" ------------------", error);
+//       }
+//     } else {
+//       console.log(" unauthorized access ");
+//       alert(" unauthorized ");
+//     }
+//   };
 
-  return (
-    <div className="comment">
-      <div className="info">
-        <h2 className="comment-header">@ {props.username} </h2>
-        <p1>
-          <Moment fromNow>{props.tx}</Moment>
-        </p1>
-      </div>
-      <p1 className="comment-body">-- {props.text}</p1>
+//   return (
+//     <div className="comment">
+//       <div className="info">
+//         <h2 className="comment-header">@ {props.username} </h2>
+//         <p1>
+//           <Moment fromNow>{props.tx}</Moment>
+//         </p1>
+//       </div>
+//       <p1 className="comment-body">-- {props.text}</p1>
 
-      <p className="comment-footer">
-        <a
-          href="#"
-          className="comment-footer-delete"
-          onClick={() => deleteComment(props.cid, props.uid)}
-        >
-          Delete
-        </a>
-      </p>
-    </div>
-  );
-};
+//       <p className="comment-footer">
+//         <a
+//           href="#"
+//           className="comment-footer-delete"
+//           onClick={() => deleteComment(props.cid, props.uid)}
+//         >
+//           Delete
+//         </a>
+//       </p>
+//     </div>
+//   );
+// };
 
 export default Post;

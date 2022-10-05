@@ -138,6 +138,23 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getUsername = async (req, res) => {
+  let id = parseInt(req.query.id);
+
+  console.log("id :", req.query.id);
+  try {
+    const user = await Users.findOne({
+      attributes: ["name", "username", "email"],
+      where: {
+        id: req.query.id,
+      },
+    });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log("error in geting username", error);
+  }
+};
+
 const logout = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   console.log("00000000000000000000000000000 ", refreshToken);
@@ -221,4 +238,5 @@ module.exports = {
   login,
   getUsers,
   logout,
+  getUsername,
 };

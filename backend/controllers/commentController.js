@@ -40,7 +40,9 @@ const addComment = async (req, res) => {
 const removeComment = async (req, res) => {
   Promise.all([
     await Comments.destroy({
-      where: req.body,
+      where: {
+        id: req.body.id,
+      },
     }),
 
     await Tweets.decrement("commentsCount", {

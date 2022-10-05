@@ -32,6 +32,22 @@ const likeTweet = async (req, res) => {
   }
 };
 
+const removeLike = async (req, res) => {
+  try {
+    const unlike = await Likes.destroy({
+      where: req.body,
+    });
+    await Tweets.decrement("likesCount", {
+      by: 1,
+      where: { id: req.body.tweetId },
+    });
+
+    return res.status(200).json({ unlike });
+  } catch (error) {
+    res.status(401).json(error);
+  }
+};
+
 const getTweetsLikes = async (req, res) => {
   const likes = await Users.findAll({
     attributes: ["username", "name"],
@@ -78,4 +94,5 @@ module.exports = {
   likeTweet,
   getTweetsLikes,
   iLiked,
+  removeLike,
 };

@@ -47,7 +47,7 @@ const Sidebar = () => {
       <SidebarOption text="Notification" Icon={NotificationsNoneIcon} />
       {/* <SidebarOption text="follow" Icon={PersonAddOutlinedIcon} /> */}
       <SidebarOption text="messages" Icon={MailOutlineIcon} />
-      <SidebarOption text="profile" Icon={PermIdentityIcon} />
+      {/* <SidebarOption text={test} Icon={PermIdentityIcon} /> */}
       {/* <p> lets see : {test}</p> */}
 
       <Button variant="outlined" className="sidebar__tweet" fullWidth>
